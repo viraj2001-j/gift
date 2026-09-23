@@ -8,7 +8,7 @@ const TAUNT_MESSAGES = [
   "Nope! You gotta click Continue! 💕",
   "Can't catch me! 🌸",
   "Too slow! ⚡",
-  "Only Continue is allowed!✨",
+  "Only Continue is allowed✨",
   "Nope nope nope! 🙈",
   "Try again! 🎀",
   "Almost had it! 💖",
