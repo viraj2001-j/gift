@@ -18,9 +18,11 @@ export default function SurprisePage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Initialize audio element with public audio file
-    audioRef.current = new Audio("/surprise.mp3");
-    audioRef.current.onended = () => setIsPlaying(false);
+    // Initialize audio element with public audio file and loop continuously
+    const audio = new Audio("/surprise.mp3");
+    audio.loop = true;
+    audio.onended = () => setIsPlaying(false);
+    audioRef.current = audio;
 
     // Generate background sparkles
     const items: FloatingSparkle[] = Array.from({ length: 30 }, (_, i) => ({
@@ -32,9 +34,11 @@ export default function SurprisePage() {
     }));
     setSparkles(items);
 
+    // Stop song immediately when user closes or navigates back/away from the page
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.currentTime = 0;
         audioRef.current = null;
       }
     };
@@ -46,11 +50,11 @@ export default function SurprisePage() {
     }
 
     if (audioRef.current) {
+      audioRef.current.loop = true;
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
-        audioRef.current.currentTime = 0;
         audioRef.current.play().then(() => {
           setIsPlaying(true);
         }).catch((err) => {
@@ -111,7 +115,7 @@ export default function SurprisePage() {
                 <div className="flex flex-col items-center animate-bounce-wiggle">
                   <span className="text-6xl sm:text-7xl mb-2">🥳📦</span>
                   <span className="text-xs font-black text-pink-800 tracking-wider uppercase">
-                    {isPlaying ? "🎵 Song Playing..." : "▶️ Tap to Replay Song"}
+                    {isPlaying ? "🎵 Song Playing Continuously..." : "▶️ Tap to Play Song"}
                   </span>
                 </div>
               ) : (
