@@ -48,27 +48,41 @@ export default function SurprisePage() {
     };
   }, []);
 
-  const handleOpenGiftBox = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-    }
-
-    if (isPlaying) {
-      // Pause both video and audio
-      if (audioRef.current) audioRef.current.pause();
-      if (videoRef.current) videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      // Play both video and audio together
-      if (audioRef.current) {
-        audioRef.current.loop = true;
-        audioRef.current.play().catch((err) => console.log("Audio error:", err));
-      }
+  // Autoplay video and audio immediately when the gift box is clicked (isOpen becomes true)
+  useEffect(() => {
+    if (isOpen) {
       if (videoRef.current) {
         videoRef.current.muted = true; // Silence original video audio
         videoRef.current.play().catch((err) => console.log("Video error:", err));
       }
+      if (audioRef.current) {
+        audioRef.current.loop = true;
+        audioRef.current.play().catch((err) => console.log("Audio error:", err));
+      }
       setIsPlaying(true);
+    }
+  }, [isOpen]);
+
+  const handleOpenGiftBox = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    } else {
+      // Toggle play/pause if already opened
+      if (isPlaying) {
+        if (audioRef.current) audioRef.current.pause();
+        if (videoRef.current) videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        if (audioRef.current) {
+          audioRef.current.loop = true;
+          audioRef.current.play().catch((err) => console.log("Audio error:", err));
+        }
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          videoRef.current.play().catch((err) => console.log("Video error:", err));
+        }
+        setIsPlaying(true);
+      }
     }
   };
 
@@ -132,12 +146,13 @@ export default function SurprisePage() {
             </div>
           </button>
         ) : (
-          /* OPENED STATE: FULL UNCROPPED MUTED VIDEO + PUBLIC AUDIO TRACK */
+          /* OPENED STATE: AUTOPLAYING UNCROPPED MUTED VIDEO + PUBLIC AUDIO TRACK */
           <div className="flex flex-col items-center w-full animate-fade-in">
             <div className="relative w-full max-h-[70vh] flex items-center justify-center overflow-hidden rounded-2xl border-4 border-pink-300 shadow-2xl bg-black">
               <video
                 ref={videoRef}
                 src="/surprise.mp4"
+                autoPlay
                 muted
                 loop
                 playsInline
