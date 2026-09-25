@@ -73,7 +73,7 @@ export default function SurprisePage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-br from-rose-100 via-pink-50 to-purple-100 overflow-hidden font-sans select-none">
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-center py-8 px-4 bg-gradient-to-br from-rose-100 via-pink-50 to-purple-100 overflow-hidden font-sans select-none">
       {/* Background Sparkles & Floating Hearts */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {sparkles.map((sparkle) => (
@@ -97,17 +97,21 @@ export default function SurprisePage() {
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-300/30 rounded-full filter blur-3xl animate-pulse"></div>
 
       {/* Header Title */}
-      <div className="relative z-10 text-center max-w-xl mx-auto mb-6">
+      <div className="relative z-10 text-center max-w-xl mx-auto mb-4">
         <div className="inline-block px-4 py-1.5 bg-pink-200/90 text-pink-900 text-sm font-bold rounded-full mb-3 shadow-sm animate-bounce">
           {isOpen ? "🎉 SURPRISE UNLOCKED! 🎉" : "🎁 YOUR SURPRISE GIFT"}
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-pink-950 tracking-tight">
-          {isOpen ? "Yay! Surprise Video & Song! 💖" : "Tap To Open Your Gift! 🎁"}
+          {isOpen ? "Yay! Full Surprise Video & Song! 💖" : "Tap To Open Your Gift! 🎁"}
         </h1>
       </div>
 
-      {/* MAIN CONTAINER (GIFT BOX -> VIDEO REVEAL) */}
-      <main className="relative z-10 mx-4 p-6 sm:p-8 max-w-md w-full bg-white/75 backdrop-blur-xl border border-pink-200/80 rounded-3xl shadow-2xl text-center flex flex-col items-center justify-center transition-all duration-300">
+      {/* MAIN CONTAINER (GIFT BOX -> FULL UNCROPPED VIDEO REVEAL) */}
+      <main
+        className={`relative z-10 mx-4 p-6 sm:p-8 w-full bg-white/80 backdrop-blur-xl border border-pink-200/80 rounded-3xl shadow-2xl text-center flex flex-col items-center justify-center transition-all duration-300 ${
+          isOpen ? "max-w-xl sm:max-w-2xl" : "max-w-md"
+        }`}
+      >
         {!isOpen ? (
           /* CLOSED GIFT BOX BUTTON */
           <button
@@ -128,16 +132,16 @@ export default function SurprisePage() {
             </div>
           </button>
         ) : (
-          /* OPENED STATE: MUTED VIDEO + PLAYING PUBLIC AUDIO */
+          /* OPENED STATE: FULL UNCROPPED MUTED VIDEO + PUBLIC AUDIO TRACK */
           <div className="flex flex-col items-center w-full animate-fade-in">
-            <div className="relative w-full overflow-hidden rounded-2xl border-4 border-pink-300 shadow-2xl bg-black">
+            <div className="relative w-full max-h-[70vh] flex items-center justify-center overflow-hidden rounded-2xl border-4 border-pink-300 shadow-2xl bg-black">
               <video
                 ref={videoRef}
                 src="/surprise.mp4"
                 muted
                 loop
                 playsInline
-                className="w-full h-auto max-h-[360px] object-cover rounded-xl"
+                className="w-full h-auto max-h-[70vh] object-contain rounded-xl cursor-pointer"
                 onClick={handleOpenGiftBox}
               />
               {!isPlaying && (
@@ -145,7 +149,7 @@ export default function SurprisePage() {
                   onClick={handleOpenGiftBox}
                   className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer"
                 >
-                  <span className="text-5xl text-white drop-shadow-md">▶️</span>
+                  <span className="text-6xl text-white drop-shadow-md">▶️</span>
                 </div>
               )}
             </div>
@@ -154,7 +158,7 @@ export default function SurprisePage() {
               Surprise! 🎉💖
             </p>
             <p className="text-pink-700 font-medium text-xs sm:text-sm mt-1 leading-relaxed">
-              Video is playing muted with your special public audio track! 🎶✨
+              Enjoy your full video playing with the special audio song! 🎶✨
             </p>
 
             {/* Play/Pause Media Button */}
@@ -169,7 +173,7 @@ export default function SurprisePage() {
       </main>
 
       {/* Footer Navigation */}
-      <div className="relative z-10 mt-8">
+      <div className="relative z-10 mt-6">
         <Link
           href="/"
           className="inline-flex items-center gap-2 px-6 py-3 bg-white/80 backdrop-blur-md border border-pink-300 text-pink-800 font-bold text-sm rounded-full shadow-md hover:bg-white hover:scale-105 transition duration-200"
@@ -178,7 +182,7 @@ export default function SurprisePage() {
         </Link>
       </div>
 
-      <footer className="relative z-10 mt-6 text-xs text-pink-400 font-medium">
+      <footer className="relative z-10 mt-4 text-xs text-pink-400 font-medium">
         Made with ❤️ for a lovely friend
       </footer>
     </div>
